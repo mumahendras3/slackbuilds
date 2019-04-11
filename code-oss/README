@@ -1,0 +1,12 @@
+Visual Studio Code.
+
+VS Code is a new type of tool that combines the simplicity of a code
+editor with what developers need for their core edit-build-debug
+cycle. Code provides comprehensive editing and debugging support, an
+extensibility model, and lightweight integration with existing tools.
+
+To compile this successfully you need to set nodejs' memory limit at least
+4096 MB (this script defaults to 8192 MB). You can set this at compile time by
+setting the MEMLIM variable as such:
+
+MEMLIM=8192 ./code-oss.SlackBuild
