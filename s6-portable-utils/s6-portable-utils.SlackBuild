@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Slackware build script for s6-rc
+# Slackware build script for s6-portable-utils
 
 # Copyright 2019 Muhammad Mahendra Subrata Depok, Indonesia
 # All rights reserved.
@@ -22,8 +22,8 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-PRGNAM=s6-rc
-VERSION=${VERSION:-0.5.0.0}
+PRGNAM=s6-portable-utils
+VERSION=${VERSION:-2.2.1.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -75,6 +75,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --prefix=/usr \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
   --dynlibdir=/usr/lib${LIBDIRSUFFIX} \
+  --with-sysdeps=/usr/lib${LIBDIRSUFFIX}/skalibs/sysdeps \
   --build=$ARCH-slackware-linux
 
 make
@@ -82,7 +83,7 @@ make strip
 make install DESTDIR=$PKG
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a AUTHORS COPYING INSTALL NEWS README doc examples $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a AUTHORS COPYING INSTALL NEWS README doc $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install

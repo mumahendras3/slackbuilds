@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Slackware build script for s6-rc
+# Slackware build script for s6-linux-init
 
 # Copyright 2019 Muhammad Mahendra Subrata Depok, Indonesia
 # All rights reserved.
@@ -22,8 +22,8 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-PRGNAM=s6-rc
-VERSION=${VERSION:-0.5.0.0}
+PRGNAM=s6-linux-init
+VERSION=${VERSION:-0.4.0.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -75,6 +75,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --prefix=/usr \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
   --dynlibdir=/usr/lib${LIBDIRSUFFIX} \
+  --with-sysdeps=/usr/lib${LIBDIRSUFFIX}/skalibs/sysdeps \
   --build=$ARCH-slackware-linux
 
 make

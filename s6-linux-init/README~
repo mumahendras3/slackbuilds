@@ -7,8 +7,8 @@ complete booting environment with integrated supervision and logging without
 having to hand-craft all the details.
 
 Please read the documentation for the s6-linux-init-maker program
-(/usr/doc/s6-linux-init-<version number>/doc/s6-linux-init-maker.html)
-carefully, but if you're impatient, you can also read the quickstart guide
-(also in the same directory), which includes a small FAQ.
+(/usr/doc/s6-linux-init/doc/s6-linux-init-maker.html) carefully, but if you're
+impatient, you can also read the quickstart guide (also in the same directory),
+which includes a small FAQ.
 
 skalibs is only required at build-time, not run-time.

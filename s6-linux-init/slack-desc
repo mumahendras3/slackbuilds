@@ -6,14 +6,20 @@
 # customary to leave one space after the ':' except on otherwise blank lines.
 
   |-----handy-ruler------------------------------------------------------|
-s6: s6-rc (service manager for s6-based systems)
+s6: s6-linux-init (a set of small tools to create a s6-based init system)
 s6:
-s6: s6-rc is a service manager for s6-based systems, i.e. a suite of
-s6: programs that can start and stop services, both long-running daemons
-s6: and one-time initialization scripts, in the proper order according
-s6: to a dependency tree. It ensures that long-running daemons are
-s6: supervised by the s6 infrastructure, and that one-time scripts are
-s6: also run in a controlled environment.
+s6: s6-linux-init is a set of minimalistic tools to create a s6-based
+s6: init system, including a /sbin/init binary, on a Linux kernel.
 s6:
-s6: http://skarnet.org/software/s6-rc/
+s6: s6-linux-init is meant to automate creation of scripts revolving
+s6: around the use of other skarnet.org tools, especially s6, in order to
+s6: provide a complete booting environment with integrated supervision
+s6: and logging without having to hand-craft all the details.
 s6:
+s6: http://skarnet.org/software/s6-linux-init/
+
+  
+
+
+
+Please read the documentation for the s6-linux-init-maker program carefully, but if you're impatient, you can also read this quickstart guide, which includes a small FAQ. 

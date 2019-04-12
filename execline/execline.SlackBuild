@@ -73,10 +73,11 @@ find -L . \
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
-      --prefix=/usr \
-      --libdir=/usr/lib${LIBDIRSUFFIX} \
-      --dynlibdir=/usr/lib${LIBDIRSUFFIX} \
-      --build=$ARCH-slackware-linux
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --dynlibdir=/usr/lib${LIBDIRSUFFIX} \
+  --with-sysdeps=/usr/lib${LIBDIRSUFFIX}/skalibs/sysdeps \
+  --build=$ARCH-slackware-linux
 
 make
 make strip

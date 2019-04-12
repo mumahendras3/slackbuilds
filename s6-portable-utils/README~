@@ -11,7 +11,7 @@ utility as determined by the Single Unix Specification, version 4; the relevant
 documentation pages mentions this. However, none of the s6-portable-utils programs
 supports internationalization.
 
-It is now an explicit non-goal of s6-portable-utils to duplicate the work of existing
+It is now an explicit non-goal of s6-portable-utils to duplicate the work ofexisting
 projects that aim to provide a lightweight implementation of standard commands.
 No more rewriting of standard commands will occur in s6-portable-utils; the package
 is now used to host specific utilities such as s6-uniquename.

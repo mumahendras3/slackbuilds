@@ -21,9 +21,6 @@ VBOX_PATH_APP_DOCS         := $(VBOX_PATH_APP_PRIVATE)
 # Disable showing registration window on startup
 VBOX_WITH_REGISTRATION  =
 
-# gcc 4.5 fix
-VBOX_WITH_WARNINGS_AS_ERRORS :=
-
 # Do not require pam
 VBOX_WITH_PAM :=
 
