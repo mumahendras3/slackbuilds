@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Code - OSS
-GenericName=Visual Studio Code - Open Source
-Categories=Development;IDE
-Exec=/usr/bin/code-oss %F
-Icon=code-oss
-Terminal=false
-Type=Application
-Comment=Editor for building and debugging modern web and cloud applications
