@@ -76,6 +76,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
   --dynlibdir=/usr/lib${LIBDIRSUFFIX} \
   --with-sysdeps=/usr/lib${LIBDIRSUFFIX}/skalibs/sysdeps \
+  --skeldir=/usr/share/${PRGNAM}/skel \
   --build=$ARCH-slackware-linux
 
 make

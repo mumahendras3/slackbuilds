@@ -12,3 +12,5 @@ carefully, but if you're impatient, you can also read the quickstart guide
 (also in the same directory), which includes a small FAQ.
 
 skalibs is only required at build-time, not run-time.
+
+Optional dependencies: nsss (https://skarnet.org/software/nsss/), utmps (https://skarnet.org/software/utmps/).
