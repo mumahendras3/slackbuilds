@@ -1,0 +1,38 @@
+#!/bin/bash
+# start/stop/restart script for iwd in Slackware
+
+start_iwd() {
+	if pgrep -u root -x iwd 1>/dev/null 2>&1; then
+		echo "iwd is already running..."
+		exit 1
+	fi
+	echo "Starting iwd:  /usr/libexec/iwd"
+	/usr/libexec/iwd \
+		1> >(tr -d '\t' | logger -p daemon.notice -t iwd -i) \
+		2> >(tr -d '\t' | logger -p daemon.err -t iwd -i) &
+}
+
+stop_iwd() {
+	if ! pgrep -u root -x iwd 1>/dev/null 2>&1; then
+		echo "iwd is not running..."
+		exit 2
+	fi
+	echo "Stopping iwd..."
+	killall -u root -w iwd
+}
+
+case $1 in
+start)
+	start_iwd
+	;;
+stop)
+	stop_iwd
+	;;
+restart)
+	stop_iwd
+	start_iwd
+	;;
+*)
+	echo "Usage: $0 (start|stop|restart)"
+	;;
+esac
