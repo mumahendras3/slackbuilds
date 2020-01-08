@@ -6,7 +6,27 @@ is that you won't have to download and compile big libraries, and care
 about portability issues, everytime you need to build a package: do it
 only once.
 
-skalibs can also be used as a sound basic start for C
-development. There are a lot of general-purpose libraries out there;
-but if your main goal is to produce small and secure C code with a
-focus on system programming, skalibs might be for you.
+skalibs can also be used as a sound basic start for C development.
+There are a lot of general-purpose libraries out there; but if your
+main goal is to produce small and secure C code with a focus on system
+programming, skalibs might be for you.
+
+NOTE:
+By default, this script will only build the static version of skalibs.
+If you want to also build the shared libraries, pass BUILD_SHARED=yes
+environment variable to the script like below:
+
+    BUILD_SHARED=yes ./skalibs.SlackBuild
+
+Similarly, to avoid building the static libraries, you can pass
+BUILD_STATIC=no to the script. For example, to only build the shared
+libraries and not the static ones, you can do something like
+
+    BUILD_SHARED=yes BUILD_STATIC=no ./skalibs.SlackBuild
+
+The upstream recommends building skarnet.org softwares with the static
+version of skalibs as most of skarnet.org softwares are small enough
+that using shared libraries are generally not worth using, hence the
+default behaviour of this script. So, unless you really need the shared
+libraries (e.g. to build your own software), building only the static
+libraries should be sufficient for most users.
