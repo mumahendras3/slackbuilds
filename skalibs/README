@@ -27,6 +27,6 @@ libraries and not the static ones, you can do something like
 The upstream recommends building skarnet.org softwares with the static
 version of skalibs as most of skarnet.org softwares are small enough
 that using shared libraries are generally not worth using, hence the
-default behaviour of this script. So, unless you really need the shared
-libraries (e.g. to build your own software), building only the static
-libraries should be sufficient for most users.
+default behaviour of this script. So, if you just want to build and use
+skarnet.org softwares, building only the static libraries should be
+sufficient.
