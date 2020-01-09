@@ -3,7 +3,7 @@
 # Slackware build script for execline
 
 # Copyright 2019 Sean MacLennan Ottawa, Canada
-# Copyright 2019 Muhammad Mahendra Subrata Depok, Canada
+# Copyright 2020 Muhammad Mahendra Subrata Depok, Indonesia
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -24,7 +24,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=execline
-VERSION=${VERSION:-2.5.1.0}
+VERSION=${VERSION:-2.5.3.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -55,6 +55,20 @@ else
   LIBDIRSUFFIX=""
 fi
 
+# Upstream recommends building skarnet.org softwares using static libraries so we are
+# going to build only the static libraries (this is the default behaviour)
+# If you need to build the shared libraries, just pass BUILD_SHARED=yes to this script
+BUILD_STATIC=${BUILD_STATIC:-yes}
+BUILD_SHARED=${BUILD_SHARED:-no}
+
+if [ "$BUILD_STATIC" = "no" ]; then
+	LIBS_CONF="--disable-static"
+fi
+
+if [ "$BUILD_SHARED" = "yes" ]; then
+	LIBS_CONF="--enable-shared $LIBS_CONF"
+fi
+
 set -e
 
 rm -rf $PKG
@@ -73,11 +87,14 @@ find -L . \
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
-  --prefix=/usr \
-  --libdir=/usr/lib${LIBDIRSUFFIX} \
-  --dynlibdir=/usr/lib${LIBDIRSUFFIX} \
+  --dynlibdir=/lib${LIBDIRSUFFIX} \
+  --bindir=/bin \
+  --libexecdir=/usr/libexec \
+  --libdir=/usr/lib${LIBDIRSUFFIX}/execline \
+  --includedir=/usr/include
   --with-sysdeps=/usr/lib${LIBDIRSUFFIX}/skalibs/sysdeps \
-  --build=$ARCH-slackware-linux
+  --with-lib=/usr/lib${LIBDIRSUFFIX}/skalibs \
+  $LIBS_CONF
 
 make
 make strip
