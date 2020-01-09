@@ -6,7 +6,7 @@
 # customary to leave one space after the ':' except on otherwise blank lines.
 
         |-----handy-ruler------------------------------------------------------|
-execline: execline (a non-interactive scripting language)
+execline: execline (non-interactive scripting language)
 execline:
 execline: execline is a (non-interactive) scripting language, like sh; but its
 execline: syntax is quite different from a traditional shell syntax. It is as
