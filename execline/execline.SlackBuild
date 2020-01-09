@@ -91,7 +91,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --bindir=/bin \
   --libexecdir=/usr/libexec \
   --libdir=/usr/lib${LIBDIRSUFFIX}/execline \
-  --includedir=/usr/include
+  --includedir=/usr/include \
   --with-sysdeps=/usr/lib${LIBDIRSUFFIX}/skalibs/sysdeps \
   --with-lib=/usr/lib${LIBDIRSUFFIX}/skalibs \
   $LIBS_CONF
