@@ -20,11 +20,6 @@ provided by s6 - besides process supervision:
   application code or link servers against any specific library, and
   without having to switch to any specific init system.
 
-s6 requires skalibs and execline at build-time but not at run-time if
-it's linked against the static version of the skalibs and execline
-libraries. skalibs and execline become run-time requirements if you link
-it against the shared versions of the skalibs and execline libraries.
-
 Some hints for using this package alongside Slackware's default
 init system:
 
@@ -45,3 +40,22 @@ s6 will supervise. You can change it to other places such as /etc/service,
 /var/service, etc. and edit the provided /bin/s6-svscanboot script
 to change the scan directory to the new service directory (i.e. change
 /service in the script to the new service directory).
+
+NOTE:
+By default, this script will only build the static libraries. If you
+want to also build the shared libraries, pass BUILD_SHARED=yes
+environment variable to the script like below:
+
+    BUILD_SHARED=yes ./s6.SlackBuild
+
+Similarly, to avoid building the static libraries, you can pass
+BUILD_STATIC=no to the script. For example, to only build the shared
+libraries and not the static ones, you can do something like
+
+    BUILD_SHARED=yes BUILD_STATIC=no ./s6.SlackBuild
+
+Upstream recommends building skarnet.org softwares with static libraries
+as most of skarnet.org softwares are small enough that using shared
+libraries are generally not worth using, hence the default behaviour of
+this script. So, if you just want to build and use skarnet.org
+softwares, building only the static libraries should be sufficient.

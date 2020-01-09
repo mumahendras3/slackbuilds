@@ -71,9 +71,8 @@ fi
 
 # By default, all binaries are linked against the static versions of the skarnet.org libraries
 # Pass LINK_SHARED=yes to link the binaries against the shared versions of the skarnet.org libraries
-# Also, if you only built the shared version of the skalibs and execline libraries, the created
-# binaries will be linked against shared libraries automatically, as though LINK_SHARED=yes is passed
-# to this script
+# Also, if you only built the shared versions of the skarnet.org libraries, binaries created by this
+# script will be linked against shared libraries automatically, as though LINK_SHARED=yes is passed to this script
 LINK_SHARED=${LINK_SHARED:-no}
 
 if [ "$LINK_SHARED" = "yes" ]; then
@@ -105,7 +104,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --includedir=/usr/include \
   --with-sysdeps=/usr/lib${LIBDIRSUFFIX}/skalibs/sysdeps \
   --with-lib=/usr/lib${LIBDIRSUFFIX}/skalibs \
-  --with-lib=/usr/lib64/execline \
+  --with-lib=/usr/lib${LIBDIRSUFFIX}/execline \
   $LIBS_CONF
 
 make

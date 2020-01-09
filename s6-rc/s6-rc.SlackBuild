@@ -2,7 +2,7 @@
 
 # Slackware build script for s6-rc
 
-# Copyright 2019 Muhammad Mahendra Subrata Depok, Indonesia
+# Copyright 2020 Muhammad Mahendra Subrata Depok, Indonesia
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -23,7 +23,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=s6-rc
-VERSION=${VERSION:-0.5.0.0}
+VERSION=${VERSION:-0.5.1.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -54,6 +54,30 @@ else
   LIBDIRSUFFIX=""
 fi
 
+# Upstream recommends building skarnet.org softwares using static libraries so we are
+# going to build only the static libraries (this is the default behaviour)
+# If you need to build the shared libraries, just pass BUILD_SHARED=yes to this script
+BUILD_STATIC=${BUILD_STATIC:-yes}
+BUILD_SHARED=${BUILD_SHARED:-no}
+
+if [ "$BUILD_STATIC" = "no" ]; then
+		LIBS_CONF="--disable-static"
+fi
+
+if [ "$BUILD_SHARED" = "yes" ]; then
+		LIBS_CONF="--enable-shared $LIBS_CONF"
+fi
+
+# By default, all binaries are linked against the static versions of the skarnet.org libraries
+# Pass LINK_SHARED=yes to link the binaries against the shared versions of the skarnet.org libraries
+# Also, if you only built the shared versions of the skarnet.org libraries, binaries created by this
+# script will be linked against shared libraries automatically, as though LINK_SHARED=yes is passed to this script
+LINK_SHARED=${LINK_SHARED:-no}
+
+if [ "$LINK_SHARED" = "yes" ]; then
+		LIBS_CONF="--disable-allstatic $LIBS_CONF"
+fi
+
 set -e
 
 rm -rf $PKG
@@ -72,11 +96,17 @@ find -L . \
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
-  --prefix=/usr \
-  --libdir=/usr/lib${LIBDIRSUFFIX} \
-  --dynlibdir=/usr/lib${LIBDIRSUFFIX} \
+  --dynlibdir=/lib${LIBDIRSUFFIX} \
+  --bindir=/bin \
+  --libexecdir=/usr/libexec \
+  --libdir=/usr/lib${LIBDIRSUFFIX}/s6-rc \
+  --includedir=/usr/include \
+  --livedir=/run/s6/rc \
   --with-sysdeps=/usr/lib${LIBDIRSUFFIX}/skalibs/sysdeps \
-  --build=$ARCH-slackware-linux
+  --with-lib=/usr/lib${LIBDIRSUFFIX}/skalibs \
+  --with-lib=/usr/lib${LIBDIRSUFFIX}/execline \
+  --with-lib=/usr/lib${LIBDIRSUFFIX}/s6 \
+  $LIBS_CONF
 
 make
 make strip
