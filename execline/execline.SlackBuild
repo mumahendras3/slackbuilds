@@ -69,6 +69,14 @@ if [ "$BUILD_SHARED" = "yes" ]; then
 	LIBS_CONF="--enable-shared $LIBS_CONF"
 fi
 
+# By default, all binaries are linked against the static versions of the skarnet.org libraries
+# Pass LINK_SHARED=yes to link the binaries against the shared versions of the skarnet.org libraries
+LINK_SHARED=${LINK_SHARED:-no}
+
+if [ "$LINK_SHARED" = "yes" ]; then
+	LIBS_CONF="--disable-allstatic $LIBS_CONF"
+fi
+
 set -e
 
 rm -rf $PKG

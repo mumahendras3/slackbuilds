@@ -13,3 +13,9 @@ execline requires skalibs at build-time but not at run-time if it's
 linked against the static version of the skalibs library. skalibs
 becomes run-time requirement if you link it against the shared version
 of the skalibs library.
+
+NOTE:
+You need to pass LINK_SHARED=yes to the script if you only build the
+shared version of skalibs previously.
+
+    LINK_SHARED=yes ./execline.SlackBuild
