@@ -7,30 +7,41 @@ be used within or without the framework, and that can be assembled
 together to achieve powerful functionality with a very small amount of
 code.
 
-skalibs is only required at build time, not run time.
+Examples of things you can do by assembling together several programs
+provided by s6 - besides process supervision:
 
-If you want to use s6 alongside Slackware's default init system,
-pass INSTALL=no to s6.SlackBuild script:
+- syslogd functionality, using much less resources than the traditional
+  syslogd.
+- Reliable service readiness notification, which is the basis for
+  service dependency management.
+- Controlled privileged gain as with sudo, without using any suid
+  programs.
+- The useful parts of socket activation without having to change
+  application code or link servers against any specific library, and
+  without having to switch to any specific init system.
 
-INSTALL=no ./s6.SlackBuild
-
+s6 requires skalibs and execline at build-time but not at run-time if
+it's linked against the static version of the skalibs and execline
+libraries. skalibs and execline become run-time requirements if you link
+it against the shared versions of the skalibs and execline libraries.
 
 Some hints for using this package alongside Slackware's default
 init system:
 
 I added the following to my /etc/inittab:
 
-# S6
-sv:12345:respawn:/usr/bin/s6-svscanboot
+    # S6
+    sv:12345:respawn:/bin/s6-svscanboot
 
 Then did a 'telinit q' to start it.
 
 Note that the default s6-svscanboot provided disables polling
 (-t0). So after adding a new service to /service you should call:
 
-/usr/bin/s6-svscanctl -a /service
+    /bin/s6-svscanctl -a /service
 
 where /service is a directory that contains all the services that
 s6 will supervise. You can change it to other places such as /etc/service,
-/var/service, etc. and adapt the provided /usr/bin/s6-svscanboot script
-to scan the new service directory.
+/var/service, etc. and edit the provided /bin/s6-svscanboot script
+to change the scan directory to the new service directory (i.e. change
+/service in the script to the new service directory).
