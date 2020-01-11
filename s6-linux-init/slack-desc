@@ -5,21 +5,15 @@
 # You must make exactly 11 lines for the formatting to be correct.  It's also
 # customary to leave one space after the ':' except on otherwise blank lines.
 
-  |-----handy-ruler------------------------------------------------------|
-s6: s6-linux-init (a set of small tools to create a s6-based init system)
-s6:
-s6: s6-linux-init is a set of minimalistic tools to create a s6-based
-s6: init system, including a /sbin/init binary, on a Linux kernel.
-s6:
-s6: s6-linux-init is meant to automate creation of scripts revolving
-s6: around the use of other skarnet.org tools, especially s6, in order to
-s6: provide a complete booting environment with integrated supervision
-s6: and logging without having to hand-craft all the details.
-s6:
-s6: http://skarnet.org/software/s6-linux-init/
-
-  
-
-
-
-Please read the documentation for the s6-linux-init-maker program carefully, but if you're impatient, you can also read this quickstart guide, which includes a small FAQ. 
+             |-----handy-ruler------------------------------------------------------|
+s6-linux-init: s6-linux-init (a set of small tools to create an s6-based init system)
+s6-linux-init:
+s6-linux-init: s6-linux-init is a set of minimalistic tools used to create an
+s6-linux-init: s6-based init system, including a /sbin/init binary, on a Linux
+s6-linux-init: kernel. The resulting architecture follows the Unix philosophy (one
+s6-linux-init: job -> one tool) as closely as possible and is fully dedicated to the
+s6-linux-init: s6 way of managing a system while still be fully compliant with
+s6-linux-init: various empirical and historical specifications.
+s6-linux-init:
+s6-linux-init: Homepage: https://skarnet.org/software/s6-linux-init/
+s6-linux-init:

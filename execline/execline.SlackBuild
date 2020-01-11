@@ -55,9 +55,8 @@ else
   LIBDIRSUFFIX=""
 fi
 
-# Upstream recommends building skarnet.org softwares using static libraries so we are
-# going to build only the static libraries (this is the default behaviour)
-# If you need to build the shared libraries, just pass BUILD_SHARED=yes to this script
+# By default, only static libraries are built. If you need to build the shared libraries, just pass
+# BUILD_SHARED=yes to this script
 BUILD_STATIC=${BUILD_STATIC:-yes}
 BUILD_SHARED=${BUILD_SHARED:-no}
 
@@ -71,8 +70,8 @@ fi
 
 # By default, all binaries are linked against the static versions of the skarnet.org libraries
 # Pass LINK_SHARED=yes to link the binaries against the shared versions of the skarnet.org libraries
-# Also, if you only built the shared versions of the skarnet.org libraries, binaries created by this
-# script will be linked against shared libraries automatically, as though LINK_SHARED=yes is passed to this script
+# Also, if you only built the shared versions of the skarnet.org libraries, the binaries will be
+# linked against shared libraries automatically, as though LINK_SHARED=yes is passed to this script
 LINK_SHARED=${LINK_SHARED:-no}
 
 if [ "$LINK_SHARED" = "yes" ]; then

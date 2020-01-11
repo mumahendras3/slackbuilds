@@ -12,8 +12,12 @@ main goal is to produce small and secure C code with a focus on system
 programming, skalibs might be for you.
 
 NOTE:
-By default, this script will only build the static libraries. If you
-want to also build the shared libraries, pass BUILD_SHARED=yes
+Upstream recommends building skarnet.org softwares with static libraries
+as most of skarnet.org softwares are small enough that using shared
+libraries are generally not worth using. Therefore, the SlackBuild
+script will only build the static libraries by default.
+
+If you want to also build the shared libraries, pass BUILD_SHARED=yes
 environment variable to the script like below:
 
     BUILD_SHARED=yes ./skalibs.SlackBuild
@@ -24,8 +28,5 @@ libraries and not the static ones, you can do something like
 
     BUILD_SHARED=yes BUILD_STATIC=no ./skalibs.SlackBuild
 
-Upstream recommends building skarnet.org softwares with static libraries
-as most of skarnet.org softwares are small enough that using shared
-libraries are generally not worth using, hence the default behaviour of
-this script. So, if you just want to build and use skarnet.org
-softwares, building only the static libraries should be sufficient.
+If you just want to build and use skarnet.org softwares, building only
+the static libraries should be sufficient.

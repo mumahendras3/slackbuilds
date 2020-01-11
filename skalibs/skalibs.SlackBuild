@@ -56,8 +56,7 @@ else
 fi
 
 # Upstream recommends building skarnet.org softwares using the static
-# version of skalibs so we are going to build just the static version of
-# skalibs by default
+# version of skalibs so we are going to build just the static version of skalibs by default
 # If you need to build the shared libraries, just pass BUILD_SHARED=yes to this script
 BUILD_STATIC=${BUILD_STATIC:-yes}
 BUILD_SHARED=${BUILD_SHARED:-no}

@@ -1,16 +1,44 @@
-s6-linux-init is a set of minimalistic tools to create a s6-based init system,
-including a /sbin/init binary, on a Linux kernel.
+s6-linux-init is a set of minimalistic tools used to create a s6-based
+init system, including a /sbin/init binary, on a Linux kernel.
 
-s6-linux-init is meant to automate creation of scripts revolving around
-the use of other skarnet.org tools, especially s6, in order to provide a
-complete booting environment with integrated supervision and logging without
-having to hand-craft all the details.
+The resulting architecture follows the Unix philosophy (one job -> one
+tool) as closely as possible, and is fully dedicated to the s6 way of
+managing a system:
 
-Please read the documentation for the s6-linux-init-maker program
-(/usr/doc/s6-linux-init-<version number>/doc/s6-linux-init-maker.html)
-carefully, but if you're impatient, you can also read the quickstart guide
-(also in the same directory), which includes a small FAQ.
+- s6-svscan runs as process 1 for the whole machine lifetime.
+- Every daemon is supervised.
+- No logs are ever lost.
+- Policy is entirely left to the user. Typically, any service manager
+  can be run on top of s6-linux-init.
 
-skalibs is only required at build-time, not run-time.
+Nevertheless, the architecture is fully compliant with various empirical
+and historical specifications. For instance, it provides:
 
-Optional dependencies: nsss (https://skarnet.org/software/nsss/), utmps (https://skarnet.org/software/utmps/).
+- utmp management compatible with sysvinit,
+- runlevel management, with a configurable default, overridable from the
+  kernel command line,
+- sysvinit-like commands to shut the system down, including a shutdown
+  command that follows the LSB specification.
+
+Optional dependencies:
+nsss (https://skarnet.org/software/nsss/) (not available at SBo)
+utmps (https://skarnet.org/software/utmps/) (not available at SBo)
+
+NOTE:
+By default, this script will only build the static libraries. If you
+want to also build the shared libraries, pass BUILD_SHARED=yes
+environment variable to the script like below:
+
+    BUILD_SHARED=yes ./s6-rc.SlackBuild
+
+Similarly, to avoid building the static libraries, you can pass
+BUILD_STATIC=no to the script. For example, to only build the shared
+libraries and not the static ones, you can do something like
+
+    BUILD_SHARED=yes BUILD_STATIC=no ./s6-rc.SlackBuild
+
+Upstream recommends building skarnet.org softwares with static libraries
+as most of skarnet.org softwares are small enough that using shared
+libraries are generally not worth using, hence the default behaviour of
+this script. So, if you just want to build and use skarnet.org
+softwares, building only the static libraries should be sufficient.

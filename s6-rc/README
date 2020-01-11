@@ -5,20 +5,25 @@ It ensures that long-running daemons are supervised by the s6 infrastructure,
 and that one-time scripts are also run in a controlled environment.
 
 NOTE:
-By default, this script will only build the static libraries. If you
-want to also build the shared libraries, pass BUILD_SHARED=yes
-environment variable to the script like below:
+Upstream recommends building skarnet.org softwares with static libraries
+as most of skarnet.org softwares are small enough that using shared
+libraries are generally not worth using. Therefore, by default, shared
+libraries are not built and binaries are linked against the static
+versions of the skarnet.org libraries.
+
+If you want to also build the shared libraries, pass BUILD_SHARED=yes
+environment variable to the SlackBuild script like below:
 
     BUILD_SHARED=yes ./s6-rc.SlackBuild
 
 Similarly, to avoid building the static libraries, you can pass
 BUILD_STATIC=no to the script. For example, to only build the shared
-libraries and not the static ones, you can do something like
+libraries and not the static ones, you can do something like:
 
     BUILD_SHARED=yes BUILD_STATIC=no ./s6-rc.SlackBuild
 
-Upstream recommends building skarnet.org softwares with static libraries
-as most of skarnet.org softwares are small enough that using shared
-libraries are generally not worth using, hence the default behaviour of
-this script. So, if you just want to build and use skarnet.org
-softwares, building only the static libraries should be sufficient.
+If you just want to build and use skarnet.org softwares, building only
+the static libraries should be sufficient.
+
+If you want the binaries to be linked against the shared versions of the
+skarnet.org libraries, pass LINK_SHARED=yes to the script.

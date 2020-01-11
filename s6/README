@@ -20,42 +20,26 @@ provided by s6 - besides process supervision:
   application code or link servers against any specific library, and
   without having to switch to any specific init system.
 
-Some hints for using this package alongside Slackware's default
-init system:
-
-I added the following to my /etc/inittab:
-
-    # S6
-    sv:12345:respawn:/bin/s6-svscanboot
-
-Then did a 'telinit q' to start it.
-
-Note that the default s6-svscanboot provided disables polling
-(-t0). So after adding a new service to /service you should call:
-
-    /bin/s6-svscanctl -a /service
-
-where /service is a directory that contains all the services that
-s6 will supervise. You can change it to other places such as /etc/service,
-/var/service, etc. and edit the provided /bin/s6-svscanboot script
-to change the scan directory to the new service directory (i.e. change
-/service in the script to the new service directory).
-
 NOTE:
-By default, this script will only build the static libraries. If you
-want to also build the shared libraries, pass BUILD_SHARED=yes
-environment variable to the script like below:
+Upstream recommends building skarnet.org softwares with static libraries
+as most of skarnet.org softwares are small enough that using shared
+libraries are generally not worth using. Therefore, by default, shared
+libraries are not built and binaries are linked against the static
+versions of the skarnet.org libraries.
+
+If you want to also build the shared libraries, pass BUILD_SHARED=yes
+environment variable to the SlackBuild script like below:
 
     BUILD_SHARED=yes ./s6.SlackBuild
 
 Similarly, to avoid building the static libraries, you can pass
 BUILD_STATIC=no to the script. For example, to only build the shared
-libraries and not the static ones, you can do something like
+libraries and not the static ones, you can do something like:
 
     BUILD_SHARED=yes BUILD_STATIC=no ./s6.SlackBuild
 
-Upstream recommends building skarnet.org softwares with static libraries
-as most of skarnet.org softwares are small enough that using shared
-libraries are generally not worth using, hence the default behaviour of
-this script. So, if you just want to build and use skarnet.org
-softwares, building only the static libraries should be sufficient.
+If you just want to build and use skarnet.org softwares, building only
+the static libraries should be sufficient.
+
+If you want the binaries to be linked against the shared versions of the
+skarnet.org libraries, pass LINK_SHARED=yes to the script.
