@@ -25,20 +25,38 @@ nsss (https://skarnet.org/software/nsss/) (not available at SBo)
 utmps (https://skarnet.org/software/utmps/) (not available at SBo)
 
 NOTE:
-By default, this script will only build the static libraries. If you
-want to also build the shared libraries, pass BUILD_SHARED=yes
-environment variable to the script like below:
+s6-linux-init has some skeleton files that will be used to build the
+complete s6-based init system. These files will be placed under
+/etc/s6-linux-init/skel by default. You can change this by passing
+SKEL_DIR=/path/to/directory environment variable to the SlackBuild
+script like below:
 
-    BUILD_SHARED=yes ./s6-rc.SlackBuild
+    SKEL_DIR=/path/to/directory ./s6-linux-init.SlackBuild
 
-Similarly, to avoid building the static libraries, you can pass
-BUILD_STATIC=no to the script. For example, to only build the shared
-libraries and not the static ones, you can do something like
-
-    BUILD_SHARED=yes BUILD_STATIC=no ./s6-rc.SlackBuild
+The init system created by s6-linux-init will need an early boot tmpfs
+in order to work properly. By default, s6-linux-init will assume that
+this initial tmpfs will be mounted on /run. You can change this by
+passing TMPFS_DIR=/path/to/directory to the script
 
 Upstream recommends building skarnet.org softwares with static libraries
 as most of skarnet.org softwares are small enough that using shared
-libraries are generally not worth using, hence the default behaviour of
-this script. So, if you just want to build and use skarnet.org
-softwares, building only the static libraries should be sufficient.
+libraries are generally not worth using. Therefore, by default, shared
+libraries are not built and binaries are linked against the static
+versions of the skarnet.org libraries.
+
+If you want to also build the shared libraries, pass BUILD_SHARED=yes
+to the script like below:
+
+    BUILD_SHARED=yes ./s6-linux-init.SlackBuild
+
+Similarly, to avoid building the static libraries, you can pass
+BUILD_STATIC=no to the script. For example, to only build the shared
+libraries and not the static ones, you can do something like:
+
+    BUILD_SHARED=yes BUILD_STATIC=no ./s6-linux-init.SlackBuild
+
+If you just want to build and use skarnet.org softwares, building only
+the static libraries should be sufficient.
+
+If you want the binaries to be linked against the shared versions of the
+skarnet.org libraries, pass LINK_SHARED=yes to the script.
