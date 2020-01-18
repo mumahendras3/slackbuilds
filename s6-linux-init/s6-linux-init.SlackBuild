@@ -104,7 +104,7 @@ CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
   --dynlibdir=/lib${LIBDIRSUFFIX} \
-  --bindir=/bin \
+  --bindir=/sbin \
   --libexecdir=/usr/libexec \
   --libdir=/usr/lib${LIBDIRSUFFIX}/s6-linux-init \
   --includedir=/usr/include \
