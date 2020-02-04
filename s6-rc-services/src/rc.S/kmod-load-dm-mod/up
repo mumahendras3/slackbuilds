@@ -1,0 +1,16 @@
+# This is a service to load the device-mapper kernel module
+foreground { echo "Starting oneshot service:  kmod-load-dm-mod" }
+
+# Check first if the device-mapper support is already built-in or
+# the device-mapper kernel module is already loaded
+if -tn { grep -wq device-mapper /proc/devices }
+# Check if the device-mapper kernel module exists
+ifelse -n { redirfd -w 1 /dev/null redirfd -w 2 /dev/null modinfo dm-mod }
+{
+  foreground { echo "The device-mapper kernel module doesn't exist! Aborting...\n\
+(ERROR) Unable to start oneshot service:  kmod-load-dm-mod"
+  }
+  exit 1
+}
+# Load the device-mapper kernel module
+modprobe dm-mod

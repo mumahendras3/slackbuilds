@@ -1,0 +1,50 @@
+# This is a service to start the udevd daemon
+foreground { echo "Starting longrun service:  udevd" }
+
+# Perform sanity check
+# Sanity check #1, udev requires that the kernel support tmpfs:
+ifelse -n { grep -wq tmpfs /proc/filesystems }
+{
+  foreground { echo "Sorry, but you need tmpfs support in the kernel to use udev.\n\
+(ERROR) Unable to start longrun service:  udevd"
+  }
+  exit 1
+}
+# Sanity check #2, make sure that the running kernel is new enough:
+pipeline { uname -r }  
+withstdinas -n VERSION 
+importas -u version VERSION  
+multidefine -d. $version { a b c } # version = a.b.c    
+ifelse {                                                                             
+  redirfd -w 1 /dev/null expr ( ${a}.${b} < 2.6 ) | ( ${a}.${b} = 2.6 ) & ( $c < 32 )
+}
+{
+  foreground {
+    echo "Sorry, but you need a 2.6.32+ kernel to use this udev.\n\
+Your kernel version is only ${version}.\n\                                         
+(ERROR) Unable to start longrun service:  udevd"
+  }
+  exit 1
+}
+# Sanity check #3, make sure the eudev package was not removed.
+ifelse { [ -x /sbin/udevd ] }
+{
+  foreground { echo "/sbin/udevd is missing!\n\
+Please install the eudev package first or reinstall it if it's already installed.\n\
+(ERROR) Unable to start longrun service:  udevd"
+  }
+  exit 1
+}
+
+# Disable hotplug helper since udevd listens to netlink:
+foreground {
+  if { [ -e /proc/sys/kernel/hotplug ] }
+  redirfd -w 1 /proc/sys/kernel/hotplug
+  echo ""
+}
+
+# Starting udevd
+foreground { echo "Starting udevd:  /sbin/udevd" }
+# Using s6-notifyoncheck to poll udevd readiness with "udevadm control --start-exec-queue"
+# as the check script.
+s6-notifyoncheck -c "udevadm control --start-exec-queue" udevd

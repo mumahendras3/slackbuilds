@@ -1,0 +1,14 @@
+# This is a service to load the loop device kernel module
+foreground { echo "Starting oneshot service:  kmod-load-loop" }
+
+# Check if the loop device kernel module exists
+ifelse -n { redirfd -w 1 /dev/null redirfd -w 2 /dev/null modinfo loop }
+{
+  foreground { echo "The loop device kernel module doesn't exist! Aborting...\n\
+(ERROR) Unable to start oneshot service:  kmod-load-loop"
+  }
+  exit 1
+}
+# Check if it's already loaded
+if -t -n { pipeline { lsmod } grep -wq "^loop" }
+modprobe loop

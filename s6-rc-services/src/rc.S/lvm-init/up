@@ -1,0 +1,17 @@
+# This is a service to initialize the Logical Volume Manager (LVM)
+foreground { echo "Starting oneshot service:  lvm-init" }
+
+# Check if the system is configured to use LVM
+ifelse -n { [ -r /etc/lvmtab -o -d /etc/lvm/backup ] }
+{
+  foreground { echo "No /etc/lvmtab or /etc/lvm/backup found! Aborting...\n\
+(ERROR) Unable to start oneshot service:  lvm-init"
+  }
+  exit 1
+}
+# Create LVM lock/run directories
+if { mkdir -p -m 0700 /run/lvm /run/lock /run/lock/lvm }
+# Scan for available volume groups
+if { redirfd -w 2 /dev/null vgscan --mknodes --ignorelockingfailure }
+# Activate all Logical Volumes
+vgchange -ay --ignorelockingfailure
