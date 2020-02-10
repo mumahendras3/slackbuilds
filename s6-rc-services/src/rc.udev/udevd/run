@@ -1,6 +1,8 @@
-# This is a service to start the udevd daemon
-foreground { echo "Starting longrun service:  udevd" }
+######################################################################
+# This service starts the udevd daemon after doing some sanity checks
+######################################################################
 
+foreground { echo "Starting longrun service:  udevd" }
 # Perform sanity check
 # Sanity check #1, udev requires that the kernel support tmpfs:
 ifelse -n { grep -wq tmpfs /proc/filesystems }
@@ -26,8 +28,8 @@ Your kernel version is only ${version}.\n\
   }
   exit 1
 }
-# Sanity check #3, make sure the eudev package was not removed.
-ifelse { [ -x /sbin/udevd ] }
+# Sanity check #3, make sure the eudev package was not removed:
+ifelse -n { [ -x /sbin/udevd ] }
 {
   foreground { echo "/sbin/udevd is missing!\n\
 Please install the eudev package first or reinstall it if it's already installed.\n\
@@ -35,16 +37,14 @@ Please install the eudev package first or reinstall it if it's already installed
   }
   exit 1
 }
-
 # Disable hotplug helper since udevd listens to netlink:
 foreground {
   if { [ -e /proc/sys/kernel/hotplug ] }
   redirfd -w 1 /proc/sys/kernel/hotplug
   echo ""
 }
-
-# Starting udevd
+# Starting udevd:
 foreground { echo "Starting udevd:  /sbin/udevd" }
-# Using s6-notifyoncheck to poll udevd readiness with "udevadm control --start-exec-queue"
-# as the check script.
-s6-notifyoncheck -c "udevadm control --start-exec-queue" udevd
+# Using s6-notifyoncheck to poll udevd readiness by checking if udevd control socket
+# has been created.
+s6-notifyoncheck -c "[ -S /run/udev/control ]" udevd

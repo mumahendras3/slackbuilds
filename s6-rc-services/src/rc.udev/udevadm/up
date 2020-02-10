@@ -1,9 +1,0 @@
-# This is a service to run udevadm commands after udevd is ready
-foreground { echo "Starting oneshot service:  udevadm" }
-
-# We want to use add events
-foreground { echo "Triggering udev events:  /sbin/udevadm trigger --action=add" }
-# Call udevtrigger and udevsettle to do the device configuration
-if { udevadm trigger --type=subsystems --action=add }
-if { udevadm trigger --type=devices --action=add }
-udevadm settle --timeout=120
