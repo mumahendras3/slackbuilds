@@ -1,3 +1,5 @@
+#!/bin/execlineb -P
+
 ######################################################################
 # This service starts the udevd daemon after doing some sanity checks
 ######################################################################
@@ -43,8 +45,20 @@ foreground {
   redirfd -w 1 /proc/sys/kernel/hotplug
   echo ""
 }
+# Forking a background process that will handle notification readiness.
+# We will use inotifywait to wait for udev control socket availability in /run/udev.
+background {
+  fdmove 1 3
+  ifelse { [ -d /run/udev ] }
+  {
+    inotifywait -qe create --include control /run/udev
+  }
+  if { inotifywait -qqe create --include udev /run }
+  inotifywait -qe create --include control /run/udev
+}
+# We don't want unnecessary environment variables and file descriptors hanging around
+unexport !
+fdclose 3
 # Starting udevd:
 foreground { echo "Starting udevd:  /sbin/udevd" }
-# Using s6-notifyoncheck to poll udevd readiness by checking if udevd control socket
-# has been created.
-s6-notifyoncheck -c "[ -S /run/udev/control ]" udevd
+udevd
