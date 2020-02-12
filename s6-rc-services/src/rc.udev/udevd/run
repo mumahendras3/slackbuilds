@@ -56,8 +56,8 @@ background {
   redirfd -w 1 /proc/sys/kernel/hotplug
   echo ""
 }
-# We don't want unnecessary environment variables and file descriptors hanging around
-unexport !
+# We don't want unnecessary environment variables and file descriptors hanging around:
+emptyenv -p
 fdclose 3
 # Starting udevd:
 foreground { echo "Starting udevd:  /sbin/udevd" }
