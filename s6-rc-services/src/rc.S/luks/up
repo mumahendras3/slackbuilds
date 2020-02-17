@@ -42,8 +42,8 @@ ifelse -n { [ -s /etc/crypttab -a -x /sbin/cryptsetup ] }
 }
 # NOTE: we only support LUKS formatted volumes (except for swap)!
 pipeline { cat /etc/crypttab }
-pipeline { grep -v "^#" }
-forstdin -pCnd"\n\r" LUKSARRAY
+pipeline { grep -v -e "^#" -e "^[[:space:]]*$" }
+forstdin -pd"\n\r" LUKSARRAY
 importas -u luksarray LUKSARRAY
 multidefine -Cd" \t" $luksarray { luks dev pass opts }
 ifelse { [ $opts = swap ] }
@@ -80,4 +80,4 @@ ifelse { [ -f $pass ] }
   cryptsetup $luksopts --key-file=${pass} luksOpen $dev $luks
 }
 # The password was provided in plain text
-heredoc 0 $pass cryptsetup ${luksopts} luksOpen $dev $luks
+heredoc 0 $pass cryptsetup $luksopts luksOpen $dev $luks
