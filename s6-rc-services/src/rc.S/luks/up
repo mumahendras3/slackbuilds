@@ -35,7 +35,8 @@ foreground { echo "Starting oneshot service:  luks" }
 # Check if the system is configured to use LUKS
 ifelse -n { [ -s /etc/crypttab -a -x /sbin/cryptsetup ] }
 {
-  foreground { echo "This system is not configured to use LUKS. Aborting...\n\
+  foreground {
+  echo "This system is not configured to use LUKS. Aborting...
 (ERROR) Unable to start oneshot service:  luks"
   }
   exit 1
