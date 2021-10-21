@@ -120,10 +120,14 @@ make
 make strip
 make install DESTDIR=$PKG
 
-# Promote s6-svscanboot to /bin for users that want to use s6
-# alongside the system's default init system
-install examples/s6-svscanboot $PKG/bin
-sed -i 's|command|bin|g' $PKG/bin/s6-svscanboot
+# Move root-only programs to /sbin
+mkdir $PKG/sbin
+mv $PKG/bin/s6-{set,apply}uidgid $PKG/sbin
+
+# Promote s6-svscanboot to /sbin for users that want to use s6
+# alongside Slackware's default init system
+install examples/s6-svscanboot $PKG/sbin
+sed -i 's|command|bin|g' $PKG/sbin/s6-svscanboot
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a AUTHORS COPYING INSTALL NEWS README doc examples $PKG/usr/doc/$PRGNAM-$VERSION
