@@ -1,0 +1,34 @@
+#!/bin/sh
+# /etc/rc.d/rc.warp-svc - Start/stop/restart the Cloudflare WARP Client daemon
+
+start_warp_svc() {
+  if ! /usr/bin/pgrep --ns $$ -f "^/usr/sbin/warp-svc" 1> /dev/null 2> /dev/null ; then
+    echo "Starting warp-svc: /usr/sbin/warp-svc 1> /var/log/warp-svc 2>&1 &"
+    /usr/sbin/warp-svc 1> /var/log/warp-svc 2>&1 &
+  fi
+}
+
+stop_warp_svc() {
+  echo "Stopping warp-svc..."
+  /usr/bin/pkill --ns $$ -f "^/usr/sbin/warp-svc" 2> /dev/null
+}
+
+restart_warp_svc() {
+  stop_warp_svc
+  sleep 1
+  start_warp_svc
+}
+
+case "$1" in
+'start')
+  start_warp_svc
+  ;;
+'stop')
+  stop_warp_svc
+  ;;
+'restart')
+  restart_warp_svc
+  ;;
+*)
+  echo "Usage: $0 start|stop|restart"
+esac

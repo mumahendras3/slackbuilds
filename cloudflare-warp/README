@@ -1,0 +1,7 @@
+cloudflare-warp (Cloudflare WARP client)
+
+The Cloudflare WARP client allows individuals and organizations to have
+a faster, more secure, and more private experience online. The WARP
+client has several modes, to better suit different connection needs. To
+learn more about WARP and the several modes, refer to WARP modes
+(https://developers.cloudflare.com/warp-client/warp-modes).
