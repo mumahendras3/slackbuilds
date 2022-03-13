@@ -1,3 +1,8 @@
 *.tar*
 nvidia-*
 *.deb
+execline
+skalibs
+s6-rc
+s6
+s6-linux-init
