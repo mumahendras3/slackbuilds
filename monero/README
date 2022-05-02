@@ -1,0 +1,58 @@
+Monero is a private, secure, untraceable, decentralised digital
+currency. You are your bank, you control your funds, and nobody can
+trace your transfers unless you allow them to do so.
+
+Privacy: Monero uses a cryptographically sound system to allow you to
+send and receive funds without your transactions being easily revealed
+on the blockchain (the ledger of transactions that everyone has). This
+ensures that your purchases, receipts, and all transfers remain private
+by default.
+
+Security: Using the power of a distributed peer-to-peer consensus
+network, every transaction on the network is cryptographically secured.
+Individual wallets have a 25-word mnemonic seed that is only displayed
+once and can be written down to backup the wallet. Wallet files should
+be encrypted with a strong passphrase to ensure they are useless if ever
+stolen.
+
+Untraceability: By taking advantage of ring signatures, a special
+property of a certain type of cryptography, Monero is able to ensure
+that transactions are not only untraceable but have an optional measure
+of ambiguity that ensures that transactions cannot easily be tied back
+to an individual user or computer.
+
+Decentralization: The utility of Monero depends on its decentralised
+peer-to-peer consensus network - anyone should be able to run the monero
+software, validate the integrity of the blockchain, and participate in
+all aspects of the monero network using consumer-grade commodity
+hardware. Decentralization of the monero network is maintained by
+software development that minimizes the costs of running the monero
+software and inhibits the proliferation of specialized, non-commodity
+hardware.
+
+Additional notes:
+Before running the SlackBuild script, create the "monero" user/group:
+
+    groupadd -g 375 monero
+    useradd -u 375 -g 375 -c "Monero daemon (monerod) user" \
+        -d /var/lib/monero -s /sbin/nologin monero
+
+This SlackBuild script will not run the provided test suite by default.
+Pass RUN_TESTS=yes to run it:
+
+    RUN_TESTS=yes ./monero.SlackBuild
+
+The tests may take a few hours to complete.
+
+If you want to build the API documentation, install graphviz (optional),
+then pass DOCS=yes:
+
+    DOCS=yes ./monero.SlackBuild
+
+Other optional dependencies:
+- unbound (if you prefer not using the bundled version)
+- ldns (for the SSL toolkit)
+- gtest (for the test suite, using the bundled one if not installed)
+- hidapi (for enabling hardware wallet support)
+- protobuf3 (for enabling hardware wallet support)
+- torsocks (for running monerod through Tor)

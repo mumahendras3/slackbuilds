@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+      |-----handy-ruler------------------------------------------------------|
+monero: monero (private, secure, untraceable, decentralised digital currency)
+monero:
+monero: Monero is a private, secure, untraceable, decentralised digital
+monero: currency. You are your bank, you control your funds, and nobody can
+monero: trace your transfers unless you allow them to do so.
+monero:
+monero: This package provides the core implementation of Monero.
+monero:
+monero: Homepage: https://www.getmonero.org/
+monero:
+monero:
