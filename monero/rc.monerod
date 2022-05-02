@@ -21,18 +21,36 @@ start_monerod() {
       /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
         /usr/bin/monerod --detach --config-file "$CONF" --pidfile "$PID_FILE"
     else
-      echo "Starting monerod: /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --p2p-bind-ip 127.0.0.1 --config-file ${CONF} --pidfile ${PID_FILE}"
-      # Drop privileges with setpriv
-      /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
-        /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --p2p-bind-ip 127.0.0.1 --config-file "$CONF" --pidfile "$PID_FILE"
+      if [ "$TORSOCKS_ALLOW_INBOUND" = "1" ]; then
+        echo "Starting monerod: /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --config-file ${CONF} --pidfile ${PID_FILE}"
+        # Drop privileges with setpriv
+        /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
+          /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --config-file "$CONF" --pidfile "$PID_FILE"
+      else
+        echo "Starting monerod: /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --p2p-bind-ip 127.0.0.1 --config-file ${CONF} --pidfile ${PID_FILE}"
+        # Drop privileges with setpriv
+        /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
+          /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --p2p-bind-ip 127.0.0.1 --config-file "$CONF" --pidfile "$PID_FILE"
+      fi
     fi
   fi
 }
 
 stop_monerod() {
-  echo "Stopping monerod..."
-  [ -r "$PID_FILE" ] && /usr/bin/pkill -F "$PID_FILE" || \
-    /usr/bin/pkill --ns $$ -f "^/usr/bin/monerod" 2>/dev/null
+  if /usr/bin/pgrep -F "$PID_FILE" 1>/dev/null 2>&1 || \
+    /usr/bin/pgrep --ns $$ -f "^/usr/bin/monerod" 1>/dev/null 2>&1; then
+    echo "Stopping monerod..."
+    [ -r "$PID_FILE" ] && /usr/bin/pkill -F "$PID_FILE" || \
+      /usr/bin/pkill --ns $$ -f "^/usr/bin/monerod" 2>/dev/null
+    sleep 3
+    if /usr/bin/pgrep -F "$PID_FILE" 1>/dev/null 2>&1 || \
+      /usr/bin/pgrep --ns $$ -f "^/usr/bin/monerod" 1>/dev/null 2>&1; then
+      [ -r "$PID_FILE" ] && /usr/bin/pkill -9 -F "$PID_FILE" || \
+        /usr/bin/pkill -9 --ns $$ -f "^/usr/bin/monerod" 2>/dev/null
+    fi
+  else
+    echo "monerod is not running!"
+  fi
 }
 
 restart_monerod() {
