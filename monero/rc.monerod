@@ -40,14 +40,8 @@ stop_monerod() {
   if /usr/bin/pgrep -F "$PID_FILE" 1>/dev/null 2>&1 || \
     /usr/bin/pgrep --ns $$ -f "^/usr/bin/monerod" 1>/dev/null 2>&1; then
     echo "Stopping monerod..."
-    [ -r "$PID_FILE" ] && /usr/bin/pkill -F "$PID_FILE" || \
+    [ -r "$PID_FILE" ] && /usr/bin/pkill -F "$PID_FILE" 2>/dev/null || \
       /usr/bin/pkill --ns $$ -f "^/usr/bin/monerod" 2>/dev/null
-    sleep 3
-    if /usr/bin/pgrep -F "$PID_FILE" 1>/dev/null 2>&1 || \
-      /usr/bin/pgrep --ns $$ -f "^/usr/bin/monerod" 1>/dev/null 2>&1; then
-      [ -r "$PID_FILE" ] && /usr/bin/pkill -9 -F "$PID_FILE" || \
-        /usr/bin/pkill -9 --ns $$ -f "^/usr/bin/monerod" 2>/dev/null
-    fi
   else
     echo "monerod is not running!"
   fi
