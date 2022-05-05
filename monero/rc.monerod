@@ -3,7 +3,7 @@
 # /etc/rc.d/rc.monerod - Start/stop/restart monerod (Monero node instance)
 #
 
-# Default settings:
+# Fallback settings:
 CONF=/etc/monerod.conf
 PID_FILE=/run/monero/monerod.pid
 
@@ -15,24 +15,13 @@ start_monerod() {
     /usr/bin/pgrep --ns $$ -f "^/usr/bin/monerod" 1>/dev/null 2>&1 ); then
     # Make sure the PID file parent directory exists
     install -domonero -gmonero "$(/usr/bin/dirname "$PID_FILE")"
-    if [ -z "$DNS_PUBLIC" ]; then
-      echo "Starting monerod: /usr/bin/monerod --detach --config-file ${CONF} --pidfile ${PID_FILE}"
-      # Drop privileges with setpriv
-      /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
-        /usr/bin/monerod --detach --config-file "$CONF" --pidfile "$PID_FILE"
-    else
-      if [ "$TORSOCKS_ALLOW_INBOUND" = "1" ]; then
-        echo "Starting monerod: /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --config-file ${CONF} --pidfile ${PID_FILE}"
-        # Drop privileges with setpriv
-        /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
-          /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --config-file "$CONF" --pidfile "$PID_FILE"
-      else
-        echo "Starting monerod: /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --p2p-bind-ip 127.0.0.1 --config-file ${CONF} --pidfile ${PID_FILE}"
-        # Drop privileges with setpriv
-        /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
-          /usr/bin/torsocks /usr/bin/monerod --detach --no-igd --p2p-bind-ip 127.0.0.1 --config-file "$CONF" --pidfile "$PID_FILE"
-      fi
-    fi
+    echo "Starting monerod: /usr/bin/monerod --detach --config-file ${CONF} --pidfile ${PID_FILE} ${MONEROD_OPTIONS}"
+    # Drop privileges with setpriv
+    /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
+      /usr/bin/monerod --detach --config-file "$CONF" --pidfile "$PID_FILE" $MONEROD_OPTIONS
+  else
+    echo "monerod is already running!"
+    exit 1
   fi
 }
 
@@ -44,6 +33,7 @@ stop_monerod() {
       /usr/bin/pkill --ns $$ -f "^/usr/bin/monerod" 2>/dev/null
   else
     echo "monerod is not running!"
+    exit 1
   fi
 }
 
@@ -51,6 +41,16 @@ restart_monerod() {
   stop_monerod
   sleep 1
   start_monerod
+}
+
+status_monerod() {
+  if /usr/bin/pgrep -F "$PID_FILE" 1>/dev/null 2>&1 || \
+    /usr/bin/pgrep --ns $$ -f "^/usr/bin/monerod" 1>/dev/null 2>&1; then
+    /usr/bin/monerod status
+  else
+    echo "monerod is not running!"
+    exit 1
+  fi
 }
 
 case "$1" in
@@ -63,6 +63,9 @@ case "$1" in
 'restart')
   restart_monerod
   ;;
+'status')
+  status_monerod
+  ;;
 *)
-  echo "Usage: $0 start|stop|restart"
+  echo "Usage: $0 start|stop|restart|status"
 esac
