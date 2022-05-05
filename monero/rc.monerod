@@ -15,10 +15,17 @@ start_monerod() {
     /usr/bin/pgrep --ns $$ -f "^/usr/bin/monerod" 1>/dev/null 2>&1 ); then
     # Make sure the PID file parent directory exists
     install -domonero -gmonero "$(/usr/bin/dirname "$PID_FILE")"
-    echo "Starting monerod: /usr/bin/monerod --detach --config-file ${CONF} --pidfile ${PID_FILE} ${MONEROD_OPTIONS}"
-    # Drop privileges with setpriv
-    /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
-      /usr/bin/monerod --detach --config-file "$CONF" --pidfile "$PID_FILE" $MONEROD_OPTIONS
+    if [ "$USE_TORSOCKS" = "yes" ]; then
+      echo "Starting monerod: /usr/bin/torsocks /usr/bin/monerod --detach --config-file ${CONF} --pidfile ${PID_FILE} ${MONEROD_OPTIONS}"
+      # Drop privileges with setpriv
+      /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
+        /usr/bin/torsocks /usr/bin/monerod --detach --config-file "$CONF" --pidfile "$PID_FILE" $MONEROD_OPTIONS
+    else
+      echo "Starting monerod: /usr/bin/monerod --detach --config-file ${CONF} --pidfile ${PID_FILE} ${MONEROD_OPTIONS}"
+      # Drop privileges with setpriv
+      /usr/bin/setpriv --reuid=monero --regid=monero --inh-caps=-all --clear-groups \
+        /usr/bin/monerod --detach --config-file "$CONF" --pidfile "$PID_FILE" $MONEROD_OPTIONS
+    fi
   else
     echo "monerod is already running!"
     exit 1

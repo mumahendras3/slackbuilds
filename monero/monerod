@@ -6,3 +6,6 @@ PID_FILE=/run/monero/monerod.pid
 
 # To set additional options for monerod, add them in the variable below:
 MONEROD_OPTIONS=""
+
+# Uncomment to run monerod using torsocks:
+#USE_TORSOCKS=yes
