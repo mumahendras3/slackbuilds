@@ -1,0 +1,27 @@
+XMRig is a high performance, open source, cross platform RandomX,
+KawPow, CryptoNight, AstroBWT and GhostRider unified CPU/GPU miner and
+RandomX benchmark.
+
+You need to have an appropriate config.json file before starting the
+XMRig daemon. Use the online configuration wizard
+(https://xmrig.com/wizard) or the provided sample file
+(/etc/xmrig/config.json.sample) as a starting point.
+
+Additional notes:
+Before running the SlackBuild script, create the "xmrig" user/group:
+
+    groupadd -g 376 xmrig
+    useradd -u 376 -g 376 -c "XMRig daemon (xmrig) user" \
+        -d /dev/null -s /sbin/nologin xmrig
+
+By default, there is a minimum of 1% (1 minute in 100 minutes) donation
+that can't be disabled at runtime. Pass DONATELESS=yes to disable it at
+compile time:
+
+    DONATELESS=yes ./xmrig.SlackBuild
+
+You can still enable donation later at runtime by setting the
+"donate-level" option to a value greater than 0.
+
+Optional dependency:
+- msr-tools (for enabling MSR mod while running xmrig as non-root user)

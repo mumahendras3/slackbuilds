@@ -1,0 +1,74 @@
+#!/bin/sh
+#
+# /etc/rc.d/rc.xmrig - Start/stop/restart xmrig (the XMRig daemon)
+#
+
+# Fallback settings:
+CONF=/etc/xmrig/config.json
+
+# Read system configuration file:
+[ -r /etc/default/xmrig ] && . /etc/default/xmrig
+
+# Enable xmrig 1GB huge pages feature if requested:
+[ "$ENABLE_1GBPAGES" = "yes" ] && XMRIG_OPTIONS="$XMRIG_OPTIONS --randomx-1gb-pages"
+
+# Check if msr-tools is installed when using the ENABLE_MSRMOD=yes option
+if [ "$ENABLE_MSRMOD" = "yes" ]; then
+  if [ ! -x /usr/sbin/wrmsr ]; then
+    echo "You have to install msr-tools (available on SBo) before using the ENABLE_MSRMOD=yes option"
+    exit 1
+  fi
+fi
+
+# Prevent xmrig from automatically applying MSR mod when not running as root:
+[ "$RUN_AS_ROOT" != "yes" ] && XMRIG_OPTIONS="$XMRIG_OPTIONS --randomx-wrmsr=-1"
+
+start_xmrig() {
+  if ! /usr/bin/pgrep --ns $$ -f "^/usr/bin/xmrig" 1>/dev/null 2>&1; then
+    echo "Starting xmrig: /usr/bin/xmrig --background --config=${CONF} ${XMRIG_OPTIONS}"
+    if [ "$RUN_AS_ROOT" = "yes" ]; then
+      /usr/bin/xmrig --background --config="$CONF" $XMRIG_OPTIONS
+    else
+      [ "$ENABLE_1GBPAGES" = "yes" ] && /usr/sbin/enable_1gb_pages.sh
+      [ "$ENABLE_MSRMOD" = "yes" ] && /usr/sbin/randomx_boost.sh
+      # Make sure xmrig has write permission to the config file for the "autosave" feature to work
+      chown xmrig:xmrig "$CONF"
+      # Drop privileges with setpriv
+      /usr/bin/setpriv --reuid=xmrig --regid=xmrig --inh-caps=-all --clear-groups \
+        /usr/bin/xmrig --background --config="$CONF" $XMRIG_OPTIONS
+    fi
+  else
+    echo "xmrig is already running!"
+    exit 1
+  fi
+}
+
+stop_xmrig() {
+  if /usr/bin/pgrep --ns $$ -f "^/usr/bin/xmrig" 1>/dev/null 2>&1; then
+    echo "Stopping xmrig..."
+    /usr/bin/pkill --ns $$ -f "^/usr/bin/xmrig" 2>/dev/null
+  else
+    echo "xmrig is not running!"
+    exit 1
+  fi
+}
+
+restart_xmrig() {
+  stop_xmrig
+  sleep 1
+  start_xmrig
+}
+
+case "$1" in
+'start')
+  start_xmrig
+  ;;
+'stop')
+  stop_xmrig
+  ;;
+'restart')
+  restart_xmrig
+  ;;
+*)
+  echo "Usage: $0 start|stop|restart"
+esac

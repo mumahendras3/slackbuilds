@@ -1,0 +1,13 @@
+# Config file to be used:
+CONF=/etc/xmrig/config.json
+
+# To set additional options for xmrig, add them in the variable below:
+XMRIG_OPTIONS=""
+
+# Run xmrig as root (some performance optimizations can be done automatically by
+# xmrig when running as root):
+#RUN_AS_ROOT=yes
+
+# These options are not needed when running xmrig as root:
+#ENABLE_1GBPAGES=yes # https://xmrig.com/docs/miner/hugepages#onegb-huge-pages
+#ENABLE_MSRMOD=yes # https://xmrig.com/docs/miner/randomx-optimization-guide/msr
