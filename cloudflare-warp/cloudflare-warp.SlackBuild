@@ -23,8 +23,8 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=cloudflare-warp
-VERSION=${VERSION:-2022.3.253}
-COMMIT_HASH=${COMMIT_HASH:-74e314eeec}
+VERSION=${VERSION:-2022.4.235}
+COMMIT_HASH=${COMMIT_HASH:-c71a3ae2e7}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -34,6 +34,11 @@ if [ -z "$ARCH" ]; then
     arm*) ARCH=arm ;;
        *) ARCH=$( uname -m ) ;;
   esac
+fi
+
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
 fi
 
 CWD=$(pwd)
@@ -71,16 +76,21 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION $PKG/usr/{bin,sbin}
 mv $PKG/usr/share/doc/${PRGNAM}/changelog.gz $PKG/usr/doc/$PRGNAM-$VERSION
-mv $PKG/bin/{warp-cli,warp-diag} $PKG/usr/bin
+mv $PKG/bin/{warp-cli,warp-diag,warp-taskbar} $PKG/usr/bin
 mv $PKG/bin/warp-svc $PKG/usr/sbin
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
-install -Dm 0755 $CWD/rc.warp-svc $PKG/etc/rc.d/rc.warp-svc
+install -Dm755 $CWD/rc.warp-svc $PKG/etc/rc.d/rc.warp-svc.new
 
 # Don't need these:
-rm -rf $PKG/usr/share $PKG/{bin,lib}
+rm -rf $PKG/{bin,lib,usr/{lib,share/doc}}
+
+# Don't use systemd to start warp-taskbar
+sed -i 's|systemctl --user start warp-taskbar|/usr/bin/warp-taskbar|' \
+  $PKG/*/*/*/com.cloudflare.WarpTaskbar.desktop
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
